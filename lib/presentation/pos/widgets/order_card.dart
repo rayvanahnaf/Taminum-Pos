@@ -22,7 +22,7 @@ class OrderCard extends StatelessWidget {
       margin: const EdgeInsets.symmetric(vertical: 4),
       padding: const EdgeInsets.all(8),
       decoration: BoxDecoration(
-        border: Border.all(color: primaryColor),
+        border: Border.all(color: AppColors.primary),
         borderRadius: BorderRadius.circular(12),
       ),
       child: Row(
@@ -55,7 +55,7 @@ class OrderCard extends StatelessWidget {
                 ),
                 Text(
                   'Rp${double.parse(product.price).toStringAsFixed(2)}', // Format harga
-                  style: TextStyle(color: secondaryTextColor),
+                  style: TextStyle(color: AppColors.secondaryTextColor),
                 ),
               ],
             ),

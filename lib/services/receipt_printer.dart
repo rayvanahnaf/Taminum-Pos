@@ -18,12 +18,12 @@ class ReceiptPrinter {
     double total = 0;
     orders.forEach((product, qty) {
       double subtotal = product.price * qty;
-      bluetooth.printCustom("${product.name} x$qty - \$${subtotal.toStringAsFixed(2)}", 1, 0);
+      bluetooth.printCustom("${product.name} x$qty - \R\p${subtotal.toStringAsFixed(2)}", 1, 0);
       total += subtotal;
     });
 
     bluetooth.printNewLine();
-    bluetooth.printCustom("TOTAL: \$${total.toStringAsFixed(2)}", 2, 1);
+    bluetooth.printCustom("TOTAL: \R\p${total.toStringAsFixed(2)}", 2, 1);
     bluetooth.printNewLine();
     bluetooth.printCustom("Thank You!", 2, 1);
     bluetooth.printNewLine();

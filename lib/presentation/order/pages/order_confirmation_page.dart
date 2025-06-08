@@ -40,7 +40,7 @@ class OrderConfirmationPage extends StatelessWidget {
                 style: TextStyle(
                   fontSize: 18,
                   fontWeight: FontWeight.bold,
-                  color: Colors.green[800], // Judul hijau
+                  color: Colors.white, // Judul hijau
                 ),
               ),
               const Divider(),
@@ -85,7 +85,7 @@ class OrderConfirmationPage extends StatelessWidget {
                     style: const TextStyle(
                       fontSize: 16,
                       fontWeight: FontWeight.bold,
-                      color: Colors.green,
+                      color: Colors.white,
                     ),
                   ),
                 ],
@@ -133,10 +133,12 @@ class OrderConfirmationPage extends StatelessWidget {
                           fontWeight: pw.FontWeight.bold,
                         )),
                     pw.SizedBox(height: 4),
-                    pw.Text('123 Business Address, City',
+                    pw.Text('Jatinangor, Sumedang',
+                        style: pw.TextStyle(fontSize: 10)),
+                    pw.Text('@taminum_',
                         style: pw.TextStyle(fontSize: 10)),
                     pw.SizedBox(height: 4),
-                    pw.Text('Tel: (123) 456-7890 | Tax ID: 123456789',
+                    pw.Text('Tel: (123) 456-7890',
                         style: pw.TextStyle(fontSize: 10)),
                     pw.SizedBox(height: 8),
                     pw.Text('RECEIPT',
@@ -187,11 +189,11 @@ class OrderConfirmationPage extends StatelessWidget {
                             ),
                             pw.Expanded(
                               flex: 2,
-                              child: pw.Text('\$${product.price}', style: const pw.TextStyle(fontSize: 9), textAlign: pw.TextAlign.right),
+                              child: pw.Text('\R\p${product.price}', style: const pw.TextStyle(fontSize: 9), textAlign: pw.TextAlign.right),
                             ),
                             pw.Expanded(
                               flex: 2,
-                              child: pw.Text('\$${itemTotal.toStringAsFixed(2)}', style: const pw.TextStyle(fontSize: 9), textAlign: pw.TextAlign.right),
+                              child: pw.Text('\R\p${itemTotal.toStringAsFixed(2)}', style: const pw.TextStyle(fontSize: 9), textAlign: pw.TextAlign.right),
                             ),
                           ],
                         ),
@@ -221,7 +223,7 @@ class OrderConfirmationPage extends StatelessWidget {
                       mainAxisAlignment: pw.MainAxisAlignment.spaceBetween,
                       children: [
                         pw.Text('TOTAL:', style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 12)),
-                        pw.Text('\$${total.toStringAsFixed(2)}', style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 12)),
+                        pw.Text('\R\p${total.toStringAsFixed(2)}', style: pw.TextStyle(fontWeight: pw.FontWeight.bold, fontSize: 12)),
                       ],
                     ),
 
@@ -229,8 +231,7 @@ class OrderConfirmationPage extends StatelessWidget {
                     pw.SizedBox(height: 12),
                     pw.Text('Thank you for your business!', style: pw.TextStyle(fontSize: 10)),
                     pw.SizedBox(height: 6),
-                    pw.Text('Returns accepted within 14 days with receipt', style: const pw.TextStyle(fontSize: 8)),
-                    pw.Text('Page 1 of 1', style: const pw.TextStyle(fontSize: 8)),
+                    pw.Text('#TaminumKemanaMana', style: const pw.TextStyle(fontSize: 8)),
                   ],
                 ),
               ),

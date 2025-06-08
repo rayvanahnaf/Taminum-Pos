@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_pos/core/constants/color.dart';
 
 class MenuButton extends StatelessWidget {
   final Widget iconPath;
@@ -29,7 +30,7 @@ class MenuButton extends StatelessWidget {
           width: 250, // Set a consistent width for all buttons
           padding: const EdgeInsets.all(10.0), // Adjusted padding for better appearance
           decoration: BoxDecoration(
-            color: isActive ? Colors.green : Colors.white,
+            color: isActive ? AppColors.taminumColor : Colors.white,
             borderRadius: const BorderRadius.all(Radius.circular(6.0)),
             boxShadow: [
               BoxShadow(
@@ -50,7 +51,7 @@ class MenuButton extends StatelessWidget {
                 label,
                 textAlign: TextAlign.center, // Center the text
                 style: TextStyle(
-                  color: isActive ? Colors.white : Colors.green,
+                  color: isActive ? Colors.white : AppColors.taminumColor,
                   fontSize: 12,
                   fontWeight: FontWeight.w700,
                 ),

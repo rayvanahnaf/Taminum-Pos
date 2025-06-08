@@ -1,14 +1,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_pos/core/constants/color.dart';
-import 'package:flutter_pos/data/model/response/product_response_model.dart'; // Pastikan ini adalah import yang benar
+import 'package:flutter_pos/data/model/response/product_response_model.dart';
 import 'package:flutter_pos/presentation/checkout/auth/bloc/logout/logout_bloc.dart';
 import 'package:flutter_pos/presentation/checkout/auth/pages/login_page.dart';
 import 'package:flutter_pos/presentation/order/pages/order_confirmation_page.dart';
 import 'package:flutter_pos/presentation/pos/bloc/product/product_bloc.dart';
 import 'package:flutter_pos/presentation/pos/widgets/order_card.dart';
 import 'package:flutter_pos/presentation/pos/widgets/product_card.dart';
-import '../widgets/menu_button.dart'; // Import your MenuButton
+import '../widgets/menu_button.dart';
 
 class PosPage extends StatefulWidget {
   const PosPage({Key? key}) : super(key: key);
@@ -17,7 +17,7 @@ class PosPage extends StatefulWidget {
   State<PosPage> createState() => _PosPageState();
 }
 
-final List<String> categories = ['Drink', 'Snack', 'Food']; // Removed 'All'
+final List<String> categories = ['All', 'Drink', 'Snack', 'Food'];
 
 class _PosPageState extends State<PosPage> {
   final searchController = TextEditingController();
@@ -29,34 +29,39 @@ class _PosPageState extends State<PosPage> {
   @override
   void initState() {
     super.initState();
-    context.read<ProductBloc>().add(ProductFetched());
+    context.read<ProductBloc>().add(ProductFetched()); // Fetch all initially
   }
 
   void onCategoryTap(int index) {
     searchController.clear();
     indexValue.value = index;
 
-    String category = '';
-    switch (index) {
-      case 0:
-        category = 'drink';
-        break;
-      case 1:
-        category = 'snack';
-        break;
-      case 2:
-        category = 'food';
-        break;
+    if (index == 0) {
+      // All
+      context.read<ProductBloc>().add(ProductFetched());
+    } else {
+      String category = '';
+      switch (index) {
+        case 1:
+          category = 'drink';
+          break;
+        case 2:
+          category = 'snack';
+          break;
+        case 3:
+          category = 'food';
+          break;
+      }
+      context.read<ProductBloc>().add(ProductCategoryFetched(category: category));
     }
-    context.read<ProductBloc>().add(ProductCategoryFetched(category: category));
   }
 
   void addToCart(Product product) {
     setState(() {
       if (cart.containsKey(product)) {
-        cart[product] = cart[product]! + 1; // Increment quantity if already in cart
+        cart[product] = cart[product]! + 1;
       } else {
-        cart[product] = 1; // Add new product to cart
+        cart[product] = 1;
       }
     });
   }
@@ -64,9 +69,9 @@ class _PosPageState extends State<PosPage> {
   void updateQuantity(Product product, int quantity) {
     setState(() {
       if (quantity <= 0) {
-        cart.remove(product); // Remove product if quantity is 0
+        cart.remove(product);
       } else {
-        cart[product] = quantity; // Update quantity
+        cart[product] = quantity;
       }
     });
   }
@@ -79,7 +84,6 @@ class _PosPageState extends State<PosPage> {
       return;
     }
 
-    // Navigate to OrderConfirmationPage
     Navigator.of(context).push(
       MaterialPageRoute(
         builder: (context) => OrderConfirmationPage(
@@ -95,17 +99,17 @@ class _PosPageState extends State<PosPage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      backgroundColor: backgroundColor,
+      backgroundColor: AppColors.backgroundColor,
       body: SafeArea(
         child: Column(
           children: [
+            // Header
             Padding(
               padding: const EdgeInsets.all(16.0),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.center,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  // Left: Logo + Title
                   Row(
                     children: [
                       ClipRRect(
@@ -123,22 +127,19 @@ class _PosPageState extends State<PosPage> {
                       ),
                     ],
                   ),
-
-                  // Center: Search + Orders
                   Expanded(
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.center,
                       children: [
-                        // Search Bar
                         SizedBox(
                           width: 400,
                           child: TextField(
                             controller: searchController,
                             decoration: InputDecoration(
                               hintText: 'Search item...',
-                              hintStyle: TextStyle(color: secondaryTextColor),
+                              hintStyle: TextStyle(color: AppColors.secondaryTextColor),
                               filled: true,
-                              fillColor: cardColor,
+                              fillColor: AppColors.cardColor,
                               prefixIcon: const Icon(Icons.search, color: Colors.white70),
                               border: OutlineInputBorder(
                                 borderRadius: BorderRadius.circular(24),
@@ -150,12 +151,10 @@ class _PosPageState extends State<PosPage> {
                           ),
                         ),
                         const SizedBox(width: 24),
-
-                        // Orders info
                         Container(
                           padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
                           decoration: BoxDecoration(
-                            color: cardColor,
+                            color: AppColors.cardColor,
                             borderRadius: BorderRadius.circular(20),
                           ),
                           child: Text(
@@ -169,7 +168,6 @@ class _PosPageState extends State<PosPage> {
                   BlocListener<LogoutBloc, LogoutState>(
                     listener: (context, state) {
                       if (state is LogoutSuccess) {
-                        print('🔴 Logout Berhasil');
                         Navigator.of(context).pushAndRemoveUntil(
                           MaterialPageRoute(builder: (context) => const LoginPage()),
                               (route) => false,
@@ -181,7 +179,7 @@ class _PosPageState extends State<PosPage> {
                       }
                     },
                     child: PopupMenuButton<String>(
-                      icon: const Icon(Icons.more_vert, color: Colors.black),
+                      icon: const Icon(Icons.more_vert, color: Colors.white),
                       onSelected: (String value) {
                         switch (value) {
                           case 'settings':
@@ -223,46 +221,62 @@ class _PosPageState extends State<PosPage> {
                 ],
               ),
             ),
+
+            // Body Content
             Expanded(
               child: Row(
                 children: [
+                  // Left Product Area
                   Expanded(
                     flex: 3,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        // Category Selector using MenuButton
+                        // Categories
+                        // Categories
                         Padding(
                           padding: const EdgeInsets.symmetric(horizontal: 16),
                           child: ValueListenableBuilder(
                             valueListenable: indexValue,
-                            builder: (context, index, _) => Row(
-                              mainAxisAlignment: MainAxisAlignment.spaceAround, // Space buttons evenly
-                              children: [
-                                MenuButton(
-                                  iconPath: Icon(Icons.local_drink, color: index == 0 ? Colors.white : Colors.green),
-                                  label: 'Drink',
-                                  isActive: index == 0,
-                                  onPressed: () => onCategoryTap(0),
-                                ),
-                                MenuButton(
-                                  iconPath: Icon(Icons.fastfood, color: index == 1 ? Colors.white : Colors.green),
-                                  label: 'Snack',
-                                  isActive: index == 1,
-                                  onPressed: () => onCategoryTap(1),
-                                ),
-                                MenuButton(
-                                  iconPath: Icon(Icons.food_bank, color: index == 2 ? Colors.white : Colors.green),
-                                  label: 'Food',
-                                  isActive: index == 2,
-                                  onPressed: () => onCategoryTap(2),
-                                ),
-                              ],
+                            builder: (context, index, _) => SingleChildScrollView(
+                              scrollDirection: Axis.horizontal,
+                              child: Row(
+                                children: [
+                                  MenuButton(
+                                    iconPath: Icon(Icons.dashboard, color: index == 0 ? Colors.white : Colors.green),
+                                    label: 'All',
+                                    isActive: index == 0,
+                                    onPressed: () => onCategoryTap(0),
+                                  ),
+                                  MenuButton(
+                                    iconPath: Icon(Icons.local_drink, color: index == 1 ? Colors.white : Colors.green),
+                                    label: 'Drink',
+                                    isActive: index == 1,
+                                    onPressed: () => onCategoryTap(1),
+                                  ),
+                                  MenuButton(
+                                    iconPath: Icon(Icons.fastfood, color: index == 2 ? Colors.white : Colors.green),
+                                    label: 'Snack',
+                                    isActive: index == 2,
+                                    onPressed: () => onCategoryTap(2),
+                                  ),
+                                  MenuButton(
+                                    iconPath: Icon(Icons.food_bank, color: index == 3 ? Colors.white : Colors.green),
+                                    label: 'Food',
+                                    isActive: index == 3,
+                                    onPressed: () => onCategoryTap(3),
+                                  ),
+                                ].map((btn) => Padding(
+                                  padding: const EdgeInsets.symmetric(horizontal: 4.0),
+                                  child: SizedBox(width: 245, child: btn),
+                                )).toList(),
+                              ),
                             ),
                           ),
                         ),
+
                         const SizedBox(height: 12),
-                        // Wrap GridView in Expanded and remove shrinkWrap and physics
+                        // Product Grid
                         Expanded(
                           child: BlocBuilder<ProductBloc, ProductState>(
                             builder: (context, state) {
@@ -290,7 +304,7 @@ class _PosPageState extends State<PosPage> {
                                   itemBuilder: (context, index) => ProductCard(
                                     product: state.products[index],
                                     onPressed: () {
-                                      addToCart(state.products[index]); // Add product to cart on press
+                                      addToCart(state.products[index]);
                                     },
                                   ),
                                 );
@@ -299,28 +313,31 @@ class _PosPageState extends State<PosPage> {
                             },
                           ),
                         ),
-                        const SizedBox(height: 16), // Added spacing here
+                        const SizedBox(height: 16),
                       ],
                     ),
                   ),
-                  const SizedBox(width: 16), // Horizontal gap between columns
+                  const SizedBox(width: 16),
+
+                  // Right Order Summary
                   Container(
                     width: 320,
                     padding: const EdgeInsets.all(16),
-                    color: cardColor,
+                    color: AppColors.cardColor,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
+                        // Customer Info
                         Row(
                           children: [
                             Expanded(
                               child: TextField(
                                 controller: customerNameController,
                                 style: const TextStyle(color: Colors.white),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: 'Customer Name',
-                                  labelStyle: const TextStyle(color: Colors.white),
-                                  border: const UnderlineInputBorder(),
+                                  labelStyle: TextStyle(color: Colors.white),
+                                  border: UnderlineInputBorder(),
                                 ),
                               ),
                             ),
@@ -329,10 +346,10 @@ class _PosPageState extends State<PosPage> {
                               child: TextField(
                                 controller: tableNumberController,
                                 style: const TextStyle(color: Colors.white),
-                                decoration: InputDecoration(
+                                decoration: const InputDecoration(
                                   labelText: 'Table Number',
-                                  labelStyle: const TextStyle(color: Colors.white),
-                                  border: const UnderlineInputBorder(),
+                                  labelStyle: TextStyle(color: Colors.white),
+                                  border: UnderlineInputBorder(),
                                 ),
                               ),
                             ),
@@ -349,7 +366,7 @@ class _PosPageState extends State<PosPage> {
                               return OrderCard(
                                 product: product,
                                 quantity: qty,
-                                onQuantityChanged: (newQuantity) => updateQuantity(product, newQuantity),
+                                onQuantityChanged: (newQty) => updateQuantity(product, newQty),
                               );
                             }).toList(),
                           ),
@@ -361,17 +378,20 @@ class _PosPageState extends State<PosPage> {
                         ),
                         const SizedBox(height: 12),
                         ElevatedButton(
-                          onPressed: placeOrder, // Call placeOrder function
+                          onPressed: placeOrder,
                           style: ElevatedButton.styleFrom(
-                            backgroundColor: primaryColor,
+                            backgroundColor: AppColors.primary,
                             minimumSize: const Size.fromHeight(48),
                             shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(24)),
                           ),
-                          child: const Text('Place Order'),
+                          child: const Text(
+                            'Place Order',
+                            style: TextStyle(color: Colors.black, fontWeight: FontWeight.bold, fontSize: 16),
+                          ),
                         ),
                       ],
                     ),
-                  )
+                  ),
                 ],
               ),
             ),

@@ -20,9 +20,9 @@ class ProductCard extends StatelessWidget {
       onTap: onPressed,
       child: Container(
         decoration: BoxDecoration(
-          color: cardColor,
+          color: AppColors.cardColor,
           borderRadius: BorderRadius.circular(20),
-          border: Border.all(color: primaryColor.withOpacity(0.2)),
+          border: Border.all(color: AppColors.primary.withOpacity(0.2)),
           boxShadow: [
             BoxShadow(
               color: Colors.black.withOpacity(0.1),
@@ -40,7 +40,7 @@ class ProductCard extends StatelessWidget {
               height: 90,
               width: 90,
               decoration: BoxDecoration(
-                color: primaryColor.withOpacity(0.1),
+                color: AppColors.primary.withOpacity(0.1),
                 shape: BoxShape.circle,
               ),
               child: ClipOval(
