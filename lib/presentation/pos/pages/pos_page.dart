@@ -114,11 +114,19 @@ class _PosPageState extends State<PosPage> {
                     children: [
                       ClipRRect(
                         borderRadius: BorderRadius.circular(100),
-                        child: Image.asset('assets/logo.png', height: 36),
+                        child: SizedBox(
+                          height: 80,
+                          width: 80,
+                          child: Image.asset(
+                            'assets/TL.png',
+                            fit: BoxFit.cover, // Membuat gambar nge-zoom mengisi area lingkaran
+                          ),
+                        ),
                       ),
+
                       const SizedBox(width: 12),
                       const Text(
-                        'POS System',
+                        'Taminum POS',
                         style: TextStyle(
                           fontSize: 18,
                           fontWeight: FontWeight.bold,

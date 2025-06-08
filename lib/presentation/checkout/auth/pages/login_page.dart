@@ -65,10 +65,16 @@ class _LoginPageState extends State<LoginPage> {
                     // Logo di atas
                     Column(
                       children: [
-                        Image.asset(
-                          'assets/images/logo.png', // pastikan sudah di `pubspec.yaml`
-                          height: 80,
+                        ClipRRect(
+                          borderRadius: BorderRadius.circular(100), // Membuat sudut melengkung penuh
+                          child: Image.asset(
+                            'assets/TL.png',
+                            height: 80,
+                            width: 80,
+                            fit: BoxFit.cover, // Biar gambar nge-zoom & nutupin lingkaran
+                          ),
                         ),
+
                         const SizedBox(height: 16),
                         const Text(
                           'Login',
